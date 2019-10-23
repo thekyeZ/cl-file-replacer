@@ -1,6 +1,4 @@
 var fs = require('fs');
-// var path = require('path');
-
 const { readdirSync } = require('fs')
 
 const getDirectories = source =>
@@ -8,19 +6,19 @@ const getDirectories = source =>
     .filter(dirent => dirent.isDirectory())
     .filter(dirent => dirent.name[0] != ".")
     .map(dirent => dirent.name)
-    .forEach(el => replacecon(el));
+    .forEach(el => replaceBrowsersList(el));
 
-getDirectories('./')    
-
-function replacecon(file) {
+const replaceBrowsersList = file => {
     const path = file +'/gulpfile.js'
+    
     fs.readFile(path, 'utf8', function (err,data) {
         if (err && err.errno == -2) {
             return console.log(`Nie znaleziono gulpfile.js w katalogu `+path);
         } 
 
         console.log(`Znaleziono gulpfile.js w katalogu `+path)
-        console.log(data);
+        console.log('Zamieniam...');
+
         var result = data.replace(/browsers/g, 'overrideBrowserslist');
         
         fs.writeFile(path, result, 'utf8', function (err) {
@@ -28,4 +26,6 @@ function replacecon(file) {
         });
     });
 }
+
+getDirectories('./');
 
